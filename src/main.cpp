@@ -12,25 +12,32 @@
 */
 
 #include <ArduinoECCX08.h>
+#include "WaterTempMeasurer.hpp"
+#include "WaterTempSensor.hpp"
+#include "ADConverter.hpp"
+#include "DataBuffer.hpp"
+#include "Console.hpp"
+#define LOOP_INTERVAL_MSEC 1000 
+#define ADC_RESOLUTION_BIT 12
+#define MAX_DATA_RECORDS 50
+
+ADConverter* adc;
+DataBuffer* databuffer;
+Console* console;
+WaterTempSensor* sensor;
+WaterTempMeasurer* measurer;
 
 void setup() {
   Serial.begin(9600);
   while (!Serial);
-
-  if (!ECCX08.begin()) {
-    Serial.println("Failed to communicate with ECC508/ECC608!");
-    while (1);
-  }
-
-  if (!ECCX08.locked()) {
-    Serial.println("The ECC508/ECC608 is not locked!");
-    while (1);
-  }
+  adc = new ADConverter(ADC_RESOLUTION_BIT);
+  databuffer = new DataBuffer(MAX_DATA_RECORDS);
+  console = new Console(databuffer);
+  sensor = new WaterTempSensor(adc);
+  measurer = new WaterTempMeasurer((Sensor_IF*)sensor, databuffer);
 }
 
 void loop() {
-  Serial.print("Random number = ");
-  Serial.println(ECCX08.random(65535));
-
-  delay(1000);
+  measurer->measure();
+  delay(LOOP_INTERVAL_MSEC);
 }
