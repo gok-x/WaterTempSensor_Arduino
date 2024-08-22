@@ -1,11 +1,16 @@
 #include "ADConverter.hpp"
-#include <ArduinoECCX08.h>
 
-ADConverter::ADConverter(unsigned int i){
+ADConverter::ADConverter(unsigned int i, pin_size_t p){
+    pinMode(p, INPUT);
+    analogReadResolution(i);
     resolution = i;
+    pin = p;
 }
 
-unsigned int ADConverter::get_Data(){
-    Serial.println("ADConverter.get_data() called");
-    return 35U;
+int ADConverter::get_Data(){
+    //Serial.println("ADConverter.get_data() called");
+    return analogRead(pin);
+}
+unsigned int ADConverter::get_resolution(){
+    return resolution;
 }

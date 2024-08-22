@@ -17,9 +17,11 @@
 #include "ADConverter.hpp"
 #include "DataBuffer.hpp"
 #include "Console.hpp"
-#define LOOP_INTERVAL_MSEC 1000 
+#define LOOP_INTERVAL_MSEC 1000
 #define ADC_RESOLUTION_BIT 12
-#define MAX_DATA_RECORDS 50
+#define MAX_DATA_RECORDS 1
+#define ADC_INPUT_PIN A0
+#define SENSOR_REFERENCE_RESISTANCE 10000U
 
 ADConverter* adc;
 DataBuffer* databuffer;
@@ -30,11 +32,17 @@ WaterTempMeasurer* measurer;
 void setup() {
   Serial.begin(9600);
   while (!Serial);
-  adc = new ADConverter(ADC_RESOLUTION_BIT);
-  databuffer = new DataBuffer(MAX_DATA_RECORDS);
-  console = new Console(databuffer);
-  sensor = new WaterTempSensor(adc);
-  measurer = new WaterTempMeasurer((Sensor_IF*)sensor, databuffer);
+  static ADConverter adcinstance(ADC_RESOLUTION_BIT, ADC_INPUT_PIN);
+  static DataBuffer dbinstance(MAX_DATA_RECORDS);
+  static Console consoleinstance(&dbinstance);
+  static WaterTempSensor sensorinstance(&adcinstance, SENSOR_REFERENCE_RESISTANCE);
+  static WaterTempMeasurer measurerinstance((Sensor_IF*)&sensorinstance, &dbinstance);
+
+  adc = &adcinstance;
+  databuffer = &dbinstance;
+  console = &consoleinstance;
+  sensor = &sensorinstance;
+  measurer = &measurerinstance;
 }
 
 void loop() {

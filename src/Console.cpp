@@ -12,8 +12,8 @@ Console::~Console(){
 void Console::Update(Subject* theChangedSubject){
     if(theChangedSubject == subject){
          Serial.print(subject->getLastRecord().time_msec);
-         Serial.print(" msec ");
+         Serial.print("msec ");
          Serial.print(subject->getLastRecord().temperature);
-         Serial.println("℃");
+         Serial.println("degree C");
     }
 }
