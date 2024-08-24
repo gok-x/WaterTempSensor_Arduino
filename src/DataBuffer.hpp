@@ -2,7 +2,7 @@
 #define _DATABUFFER_H_
 
 #include "Subject.hpp"
-#include <vector>
+#include <deque>
 #include "Record.hpp"
 
 class DataBuffer : public Subject {
@@ -13,7 +13,7 @@ class DataBuffer : public Subject {
 
     private:
     unsigned int max_records;
-    std::vector<struct Record> records;
+    std::deque<struct Record> records;
 
 };
 

@@ -17,6 +17,7 @@
 #include "ADConverter.hpp"
 #include "DataBuffer.hpp"
 #include "Console.hpp"
+#include "Wifi.hpp"
 #define LOOP_INTERVAL_MSEC 1000
 #define ADC_RESOLUTION_BIT 12
 #define MAX_DATA_RECORDS 1
@@ -28,6 +29,10 @@ DataBuffer* databuffer;
 Console* console;
 WaterTempSensor* sensor;
 WaterTempMeasurer* measurer;
+
+char ssid[] = WIFI_SSID;                // your network SSID (name)
+char pass[] = WIFI_PASSWD;                // your network password (use for WPA, or use as key for WEP)
+int status = WL_IDLE_STATUS; 
 
 void setup() {
   Serial.begin(9600);
@@ -43,6 +48,9 @@ void setup() {
   console = &consoleinstance;
   sensor = &sensorinstance;
   measurer = &measurerinstance;
+
+  Wifi wifi;
+  wifi.connect();
 }
 
 void loop() {
