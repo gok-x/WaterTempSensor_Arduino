@@ -4,3 +4,4 @@
 .vscode/launch.json
 .vscode/ipch
 src/WifiSecret.hpp
+src/Secret_Certificates.hpp

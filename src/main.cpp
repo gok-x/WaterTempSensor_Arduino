@@ -18,6 +18,8 @@
 #include "DataBuffer.hpp"
 #include "Console.hpp"
 #include "Wifi.hpp"
+#include "PublisherToAWSIoT.hpp"
+#include "Secret_Certificates.hpp"
 #define LOOP_INTERVAL_MSEC 1000
 #define ADC_RESOLUTION_BIT 12
 #define MAX_DATA_RECORDS 1
@@ -29,6 +31,7 @@ DataBuffer* databuffer;
 Console* console;
 WaterTempSensor* sensor;
 WaterTempMeasurer* measurer;
+PublisherToAWSIoT* publisher;
 
 char ssid[] = WIFI_SSID;                // your network SSID (name)
 char pass[] = WIFI_PASSWD;                // your network password (use for WPA, or use as key for WEP)
@@ -51,6 +54,8 @@ void setup() {
 
   Wifi wifi;
   wifi.connect();
+  static PublisherToAWSIoT publisherinstance(databuffer, AWS_IOT_ENDPOINT, SECRET_CERTIFICATE);
+  publisher = &publisherinstance;
 }
 
 void loop() {
