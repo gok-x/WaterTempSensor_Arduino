@@ -11,11 +11,14 @@
 class PublisherToAWSIoT : public Observer {
     DataBuffer* subject;
     const char* const endpoint;
+    const int port;
     const char* const certificate;
+    WiFiClient wifiClient;
     BearSSLClient sslClient;
+    String destination = "/topics/";
     
     public:
-    PublisherToAWSIoT(DataBuffer* d, const char* ep, const char* cert);
+    PublisherToAWSIoT(DataBuffer* d, const char* ep, const int p, const char* cert);
     int intializeSSLClient();
     void Update(Subject*);
     String createJson(DataBuffer* databuffer);

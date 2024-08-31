@@ -20,7 +20,7 @@
 #include "Wifi.hpp"
 #include "PublisherToAWSIoT.hpp"
 #include "Secret_Certificates.hpp"
-#define LOOP_INTERVAL_MSEC 1000
+#define LOOP_INTERVAL_MSEC 10000
 #define ADC_RESOLUTION_BIT 12
 #define MAX_DATA_RECORDS 1
 #define ADC_INPUT_PIN A0
@@ -54,7 +54,7 @@ void setup() {
 
   Wifi wifi;
   wifi.connect();
-  static PublisherToAWSIoT publisherinstance(databuffer, AWS_IOT_ENDPOINT, SECRET_CERTIFICATE);
+  static PublisherToAWSIoT publisherinstance(databuffer, AWS_IOT_ENDPOINT, AWS_IOT_ENDPOINT_PORT, SECRET_CERTIFICATE);
   publisher = &publisherinstance;
 }
 
